@@ -21,7 +21,7 @@ const thumbImages = ref<HTMLElement[]>()
 const thumbsContainer = ref<HTMLElement>()
 
 const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
-  event.stopPropagation()
+
 
   if (thumbsContainer.value && thumbImages.value) {
     const thumbsContainerElement = thumbsContainer.value;
@@ -34,12 +34,12 @@ const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
         getThumbsIterator(thumbElements, thumbElementsInView)
 
     if (lastInView.index === clickedIndex && nextInToView) {
-      thumbsContainerElement.scrollTo({
+      thumbsContainerElement.scroll({
         left: thumbsContainerElement.scrollLeft + nextInToView.element.offsetWidth + 8,
         behavior: 'smooth',
       })
     } else if (firstInView.index === clickedIndex && prevInToView) {
-      thumbsContainerElement.scrollTo({
+      thumbsContainerElement.scroll({
         left: thumbsContainerElement.scrollLeft - prevInToView.element.offsetWidth - 8,
         behavior: 'smooth',
       })

@@ -9,6 +9,9 @@ export type ThumbsContainerProps = {
   width: number,
 }
 
+const THUMBS_COUNT = 6;
+const THUMBS_GAP = 8;
+
 
 const emit = defineEmits<{
   (e: "thumbsContainerSizeChanged"): void;
@@ -39,18 +42,23 @@ const onImageThumbLoaded = (event: Event, index: number) => {
 const thumbsContainerRef = ref()
 const imageThumbRefs = ref([...new Array(images.length)])
 
-const thumbsCount = 6;
-const thumbsGap = 8;
+
+const onImageThumbClick = (event: MouseEvent, index: number) => {
+  const timeout = setTimeout(() => {
+    emit('thumbClick', event, index)
+    clearTimeout(timeout)
+  }, 100)
+}
+
 </script>
 
 <template>
   <div class="ThumbsContainer flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
        :style="{width: width + 'px'}">
     <div v-for="(item, index) in images" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
-      <ImageThumb @click="(event:MouseEvent) => {
-        $emit('thumbClick', event, index)
-      }" :aspectRatio="3/2"
-                  :width="(width / thumbsCount - thumbsGap) + thumbsGap / thumbsCount" :image="item"
+      <ImageThumb @click="(event:MouseEvent) => onImageThumbClick(event, index)"
+                  :aspectRatio="3/2"
+                  :width="(width / THUMBS_COUNT - THUMBS_GAP) + THUMBS_GAP / THUMBS_COUNT" :image="item"
                   :onImageThumbLoaded="(event) => onImageThumbLoaded(event, index)"/>
     </div>
   </div>
