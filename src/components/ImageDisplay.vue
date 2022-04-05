@@ -4,7 +4,7 @@ import {onMounted, onUnmounted, ref} from "vue";
 
 export type ImageDisplayProps = {
   image: CarouselImage;
-  aspectRatio?:AspectRatio;
+  aspectRatio?: AspectRatio;
   imageMaxHeight?: number;
 };
 const {image, aspectRatio, imageMaxHeight} = withDefaults(
@@ -29,19 +29,15 @@ const onWindowResize = () => {
   emit("imageSizeChanged", imageRef.value);
 };
 
-onMounted(() => {
-  window.addEventListener("resize", onWindowResize);
-});
+onMounted(() => window.addEventListener("resize", onWindowResize));
 
-onUnmounted(() => {
-  window.removeEventListener("resize", onWindowResize);
-});
+onUnmounted(() => window.removeEventListener("resize", onWindowResize));
 
 
 </script>
 
 <template>
-  <div
+  <figure
       class="ImageDisplay"
       :style="{ maxHeight: `${imageMaxHeight}px`, aspectRatio: aspectRatio}"
   >
@@ -52,14 +48,14 @@ onUnmounted(() => {
         :style="{ aspectRatio: aspectRatio }"
         ref="imageRef"
     />
-  </div>
+  </figure>
 </template>
 
 <style scoped>
 .ImageDisplay {
   background: black;
-  display: flex;
 }
+
 img {
   background: black;
   width: 100%;

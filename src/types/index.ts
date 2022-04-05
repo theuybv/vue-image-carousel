@@ -1,3 +1,5 @@
+import {intersectRect} from "../utils";
+
 export enum AspectRatio {
   "16/9" = 16 / 9,
   "9/16" = 9 / 16,
@@ -12,3 +14,10 @@ export type CarouselImage = {
   thumbSrc: string;
   alt?: string;
 };
+
+
+export type ThumbsInOutView = {
+  index: number,
+  element: HTMLElement,
+  isInView: boolean
+}

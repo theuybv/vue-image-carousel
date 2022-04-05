@@ -3,14 +3,12 @@ import {ref} from "@vue/reactivity";
 import ImageDisplay from "./ImageDisplay.vue";
 import {CarouselImage} from "../types";
 import ThumbsContainer from "./ThumbsContainer.vue";
-import {nextTick, onMounted, Ref, watch} from "vue";
-import {getImageThumbsInOutView} from "../utils";
+import {getImageThumbsInOutView, getThumbsIterator} from "../utils";
 
 const imageContainerWidth = ref<number>(0);
-const imageThumbRefs = ref<HTMLElement[]>([]);
 
 const imageSizeChanged = (image: HTMLImageElement) => {
-  imageContainerWidth.value = image.offsetWidth;
+  imageContainerWidth.value = image.offsetWidth
 };
 
 export type ImageCarouselProps = {
@@ -19,55 +17,54 @@ export type ImageCarouselProps = {
 const {images} = defineProps<ImageCarouselProps>()
 
 const currentImage = ref<CarouselImage>(images[0])
-const imageThumbsRefs = ref<HTMLElement[]>([])
-const thumbsContainerRef = ref<HTMLElement>(document.createElement('div'))
+const thumbImages = ref<HTMLElement[]>()
+const thumbsContainer = ref<HTMLElement>()
 
-const thumbsContainerSizeChanged = (thumbContainerElement: HTMLElement) => {
- thumbsContainerRef.value = thumbContainerElement
+const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
+  event.stopPropagation()
+
+  if (thumbsContainer.value && thumbImages.value) {
+    const thumbsContainerElement = thumbsContainer.value;
+    const {
+      thumbElements,
+      thumbElementsInView,
+    } = getImageThumbsInOutView(thumbImages.value, thumbsContainer.value)
+
+    const {firstInView, lastInView, nextInToView, prevInToView} =
+        getThumbsIterator(thumbElements, thumbElementsInView)
+
+    if (lastInView.index === clickedIndex && nextInToView) {
+      thumbsContainerElement.scrollTo({
+        left: thumbsContainerElement.scrollLeft + nextInToView.element.offsetWidth + 8,
+        behavior: 'smooth',
+      })
+    } else if (firstInView.index === clickedIndex && prevInToView) {
+      thumbsContainerElement.scrollTo({
+        left: thumbsContainerElement.scrollLeft - prevInToView.element.offsetWidth - 8,
+        behavior: 'smooth',
+      })
+    }
+  }
+  currentImage.value = images[clickedIndex]
 }
 
-const onThumbClick = (index: number) => {
-  currentImage.value = images[index]
+const allThumbsLoaded = (thumbs: HTMLElement[], container: HTMLElement) => {
+  thumbImages.value = thumbs;
+  thumbsContainer.value = container;
 }
-
-onMounted(async () => {
-  await nextTick()
-
-
-
-
-})
-
-watch([thumbsContainerRef, imageThumbsRefs], ([thumbContainer, imageThumbs]) => {
-  const {
-    thumbElements,
-    thumbElementsInView,
-    thumbElementsNotInView
-  } = getImageThumbsInOutView(imageThumbs, thumbContainer)
-
-  console.log(thumbContainer)
-  console.log(imageThumbs)
-
-})
 
 </script>
 
 
 <template>
-  <section class="flex col ImageCarousel q-gutter-y-sm">
+  <section class="flex flex-col gap-2">
     <ImageDisplay
         :key="currentImage.imageSrc"
         @image-size-changed="imageSizeChanged"
         :image="currentImage"
     />
-    <ThumbsContainer :imageThumbRefs="imageThumbRefs" @thumb-click="onThumbClick"
+    <ThumbsContainer @thumb-click="onThumbClick"
                      :width="imageContainerWidth" :images="images"
-                     @thumbs-container-size-changed="thumbsContainerSizeChanged"/>
+                     @all-thumbs-loaded="allThumbsLoaded"/>
   </section>
 </template>
-
-<style scoped>
-.ImageCarousel {
-}
-</style>
-

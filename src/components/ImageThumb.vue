@@ -13,8 +13,8 @@ const {image, aspectRatio, width, onImageThumbLoaded} = defineProps<ImageThumbPr
 </script>
 
 <template>
-  <button class="ImageThumb">
-    <img @load="onImageThumbLoaded" :src="image.imageSrc" :alt="image.alt"/>
+  <button class="ImageThumb" :style="{width: width + 'px', aspectRatio: aspectRatio}">
+    <img @load="onImageThumbLoaded" :src="image.imageSrc" :alt="image.alt" :style="{aspectRatio: aspectRatio}"/>
   </button>
 </template>
 
@@ -23,16 +23,13 @@ const {image, aspectRatio, width, onImageThumbLoaded} = defineProps<ImageThumbPr
   border: none;
   cursor: pointer;
   display: flex;
-  width: v-bind(width+ 'px');
   padding: 0;
   margin: 0;
-  aspect-ratio: v-bind(aspectRatio);
 }
 
 img {
   width: 100%;
   height: 100%;
-  aspect-ratio: v-bind(aspectRatio);
   background: black;
   object-fit: cover;
 }
