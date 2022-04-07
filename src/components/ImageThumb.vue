@@ -6,15 +6,15 @@ export type ImageThumbProps = {
   image: CarouselImage,
   aspectRatio: AspectRatio
   width: number
-  onImageThumbLoaded: () => void
+  onImageThumbLoaded: (event: Event) => void
 }
 const {image, aspectRatio, width, onImageThumbLoaded} = defineProps<ImageThumbProps>()
 
 </script>
 
 <template>
-  <button class="ImageThumb" :style="{width: width + 'px', aspectRatio: aspectRatio}">
-    <img @load="onImageThumbLoaded" :src="image.imageSrc" :alt="image.alt" :style="{aspectRatio: aspectRatio}"/>
+  <button class="ImageThumb" :style="{width: width + 'px', aspectRatio: aspectRatio.toString()}">
+    <img @load="onImageThumbLoaded" :src="image.imageSrc" :alt="image.alt" :style="{aspectRatio: aspectRatio.toString()}"/>
   </button>
 </template>
 

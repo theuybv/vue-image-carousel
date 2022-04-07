@@ -39,13 +39,13 @@ onUnmounted(() => window.removeEventListener("resize", onWindowResize));
 <template>
   <figure
       class="ImageDisplay"
-      :style="{ maxHeight: `${imageMaxHeight}px`, aspectRatio: aspectRatio}"
+      :style="{ maxHeight: `${imageMaxHeight}px`, aspectRatio: aspectRatio.toString()}"
   >
     <img
         @load="onImageLoaded"
         :src="image.imageSrc"
         :alt="image.alt"
-        :style="{ aspectRatio: aspectRatio }"
+        :style="{ aspectRatio: aspectRatio.toString() }"
         ref="imageRef"
     />
   </figure>

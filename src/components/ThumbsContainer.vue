@@ -59,7 +59,7 @@ const onImageThumbClick = (event: MouseEvent, index: number) => {
       <ImageThumb @click="(event:MouseEvent) => onImageThumbClick(event, index)"
                   :aspectRatio="3/2"
                   :width="(width / THUMBS_COUNT - THUMBS_GAP) + THUMBS_GAP / THUMBS_COUNT" :image="item"
-                  :onImageThumbLoaded="(event) => onImageThumbLoaded(event, index)"/>
+                  :onImageThumbLoaded="(event: Event) => onImageThumbLoaded(event, index)"/>
     </div>
   </div>
 </template>
