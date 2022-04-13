@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import {ref} from "@vue/reactivity";
 import ImageDisplay from "./ImageDisplay.vue";
-import {CarouselImage} from "../types";
+import {CarouselImage, ImageCarouselKey, ImageCarouselProvider} from "../types";
 import ThumbsContainer from "./ThumbsContainer.vue";
 import {getImageThumbsInOutView, getThumbsIterator} from "../utils";
+import {provide, reactive} from "vue";
+
+
+provide(ImageCarouselKey, reactive<ImageCarouselProvider>({
+  imageContainerWidth: 0,
+  updateImageContainerWidth(value: number) {
+    this.imageContainerWidth = value
+  },
+  thumbsCount: 6,
+  thumbsGap: 8,
+  get thumbsWidth() {
+    return (this.imageContainerWidth / this.thumbsCount - this.thumbsGap) + this.thumbsGap / this.thumbsCount
+  }
+}))
 
 const imageContainerWidth = ref<number>(0);
 

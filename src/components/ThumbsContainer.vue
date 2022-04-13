@@ -1,12 +1,14 @@
 <script setup lang="ts">
 
-import {onMounted, onUnmounted, ref} from "vue";
-import {CarouselImage} from "../types";
+import {inject, onMounted, onUnmounted, ref} from "vue";
+import {CarouselImage, ImageCarouselKey} from "../types";
 import ImageThumb from "./ImageThumb.vue";
+
+const provider = inject(ImageCarouselKey)
+
 
 export type ThumbsContainerProps = {
   images: CarouselImage[],
-  width: number,
 }
 
 const THUMBS_COUNT = 6;
@@ -19,7 +21,7 @@ const emit = defineEmits<{
   (e: "allThumbsLoaded", thumbImageElements: HTMLElement[], thumbsContainerElement: HTMLElement): void;
 }>();
 
-const {images, width} = defineProps<ThumbsContainerProps>()
+const {images} = defineProps<ThumbsContainerProps>()
 
 const onWindowResize = () => {
   emit("thumbsContainerSizeChanged");
@@ -47,25 +49,21 @@ const onImageThumbClick = (event: MouseEvent, index: number) => {
   const timeout = setTimeout(() => {
     emit('thumbClick', event, index)
     clearTimeout(timeout)
-  }, 100)
+  }, 20)
 }
 
 </script>
 
 <template>
   <div class="ThumbsContainer flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
-       :style="{width: width + 'px'}">
+       :style="{width: provider.imageContainerWidth + 'px'}">
     <div v-for="(item, index) in images" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
       <ImageThumb @click="(event:MouseEvent) => onImageThumbClick(event, index)"
                   :aspectRatio="3/2"
-                  :width="(width / THUMBS_COUNT - THUMBS_GAP) + THUMBS_GAP / THUMBS_COUNT" :image="item"
+                  :width="provider.thumbsWidth"
+                  :image="item"
                   :onImageThumbLoaded="(event: Event) => onImageThumbLoaded(event, index)"/>
     </div>
   </div>
 </template>
-
-<style scoped>
-.ThumbsContainer {
-}
-</style>
 

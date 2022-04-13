@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {AspectRatio, CarouselImage} from "../types";
-import {onMounted, onUnmounted, ref} from "vue";
+import {AspectRatio, CarouselImage, ImageCarouselKey} from "../types";
+import {inject, onMounted, onUnmounted, ref} from "vue";
+
+const provider = inject(ImageCarouselKey)
 
 export type ImageDisplayProps = {
   image: CarouselImage;
   aspectRatio?: AspectRatio;
   imageMaxHeight?: number;
-};
+}
 const {image, aspectRatio, imageMaxHeight} = withDefaults(
     defineProps<ImageDisplayProps>(),
     {
@@ -21,12 +23,9 @@ const emit = defineEmits<{
 
 const imageRef = ref<HTMLImageElement>(document.createElement("img"));
 
-const onImageLoaded = () => {
-  emit("imageSizeChanged", imageRef.value);
-};
-
 const onWindowResize = () => {
   emit("imageSizeChanged", imageRef.value);
+  provider?.updateImageContainerWidth(imageRef.value.width)
 };
 
 onMounted(() => window.addEventListener("resize", onWindowResize));
@@ -42,7 +41,7 @@ onUnmounted(() => window.removeEventListener("resize", onWindowResize));
       :style="{ maxHeight: `${imageMaxHeight}px`, aspectRatio: aspectRatio.toString()}"
   >
     <img
-        @load="onImageLoaded"
+        @load="onWindowResize"
         :src="image.imageSrc"
         :alt="image.alt"
         :style="{ aspectRatio: aspectRatio.toString() }"

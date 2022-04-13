@@ -1,4 +1,4 @@
-import {intersectRect} from "../utils";
+import { InjectionKey } from "vue";
 
 export enum AspectRatio {
   "16/9" = 16 / 9,
@@ -15,9 +15,18 @@ export type CarouselImage = {
   alt?: string;
 };
 
-
 export type ThumbsInOutView = {
-  index: number,
-  element: HTMLElement,
-  isInView: boolean
-}
+  index: number;
+  element: HTMLElement;
+  isInView: boolean;
+};
+
+export type ImageCarouselProvider = {
+  imageContainerWidth: number;
+  updateImageContainerWidth: (value: number) => void;
+  thumbsCount: number;
+  thumbsGap: number;
+  thumbsWidth: number;
+};
+
+export const ImageCarouselKey = Symbol() as InjectionKey<ImageCarouselProvider>;
