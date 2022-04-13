@@ -11,8 +11,6 @@ export type ThumbsContainerProps = {
   images: CarouselImage[],
 }
 
-const THUMBS_COUNT = 6;
-const THUMBS_GAP = 8;
 
 
 const emit = defineEmits<{
@@ -56,11 +54,11 @@ const onImageThumbClick = (event: MouseEvent, index: number) => {
 
 <template>
   <div class="ThumbsContainer flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
-       :style="{width: provider.imageContainerWidth + 'px'}">
+       :style="{width: provider?.imageContainerWidth + 'px'}">
     <div v-for="(item, index) in images" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
       <ImageThumb @click="(event:MouseEvent) => onImageThumbClick(event, index)"
                   :aspectRatio="3/2"
-                  :width="provider.thumbsWidth"
+                  :width="provider?.thumbsWidth || 0"
                   :image="item"
                   :onImageThumbLoaded="(event: Event) => onImageThumbLoaded(event, index)"/>
     </div>

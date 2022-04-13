@@ -15,7 +15,7 @@ provide(ImageCarouselKey, reactive<ImageCarouselProvider>({
   thumbsCount: 6,
   thumbsGap: 8,
   get thumbsWidth() {
-    return (this.imageContainerWidth / this.thumbsCount - this.thumbsGap) + this.thumbsGap / this.thumbsCount
+    return ((this.imageContainerWidth / this.thumbsCount - this.thumbsGap) + this.thumbsGap / this.thumbsCount) || 0
   }
 }))
 
