@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {AspectRatio, CarouselImage} from "../types";
+import {AspectRatio, CarouselImage} from "../../types";
 
 export type ImageThumbProps = {
   image: CarouselImage,

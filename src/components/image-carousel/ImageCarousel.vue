@@ -1,36 +1,17 @@
 <script setup lang="ts">
 import {ref} from "@vue/reactivity";
 import ImageDisplay from "./ImageDisplay.vue";
-import {CarouselImage, ImageCarouselKey, ImageCarouselProvider} from "../types";
+import {CarouselImage} from "../../types";
 import ThumbsContainer from "./ThumbsContainer.vue";
-import {getImageThumbsInOutView, getThumbsIterator} from "../utils";
-import {provide, reactive} from "vue";
+import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
+import ImageCarouselProvider from "./providers/ImageCarouselProvider.vue";
 
-
-provide(ImageCarouselKey, reactive<ImageCarouselProvider>({
-  imageContainerWidth: 0,
-  updateImageContainerWidth(value: number) {
-    this.imageContainerWidth = value
-  },
-  thumbsCount: 6,
-  thumbsGap: 8,
-  get thumbsWidth() {
-    return ((this.imageContainerWidth / this.thumbsCount - this.thumbsGap) + this.thumbsGap / this.thumbsCount) || 0
-  }
-}))
-
-const imageContainerWidth = ref<number>(0);
-
-const imageSizeChanged = (image: HTMLImageElement) => {
-  imageContainerWidth.value = image.offsetWidth
-};
 
 export type ImageCarouselProps = {
   images: CarouselImage[]
 }
 const {images} = defineProps<ImageCarouselProps>()
 
-const currentImage = ref<CarouselImage>(images[0])
 const thumbImages = ref<HTMLElement[]>()
 const thumbsContainer = ref<HTMLElement>()
 
@@ -59,7 +40,6 @@ const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
       })
     }
   }
-  currentImage.value = images[clickedIndex]
 }
 
 const allThumbsLoaded = (thumbs: HTMLElement[], container: HTMLElement) => {
@@ -71,14 +51,13 @@ const allThumbsLoaded = (thumbs: HTMLElement[], container: HTMLElement) => {
 
 
 <template>
-  <section class="flex flex-col gap-2">
-    <ImageDisplay
-        :key="currentImage.imageSrc"
-        @image-size-changed="imageSizeChanged"
-        :image="currentImage"
-    />
-    <ThumbsContainer @thumb-click="onThumbClick"
-                     :width="imageContainerWidth" :images="images"
-                     @all-thumbs-loaded="allThumbsLoaded"/>
-  </section>
+  <ImageCarouselProvider :images="images" #="{context}">
+    <div class="flex flex-col gap-2">
+      <ImageDisplay
+          :key="context.currentImage.imageSrc"
+          :image="context.currentImage"
+      />
+      <ThumbsContainer @thumb-click="onThumbClick" @all-thumbs-loaded="allThumbsLoaded"/>
+    </div>
+  </ImageCarouselProvider>
 </template>

@@ -22,11 +22,15 @@ export type ThumbsInOutView = {
 };
 
 export type ImageCarouselProvider = {
+  images: CarouselImage[];
   imageContainerWidth: number;
   updateImageContainerWidth: (value: number) => void;
+  updateCurrentIndex: (value: number) => void;
   thumbsCount: number;
   thumbsGap: number;
   thumbsWidth: number;
+  currentImage: CarouselImage;
+  currentIndex: number;
 };
 
 export const ImageCarouselKey = Symbol() as InjectionKey<ImageCarouselProvider>;
