@@ -26,11 +26,19 @@ export type ImageCarouselProvider = {
   imageContainerWidth: number;
   updateImageContainerWidth: (value: number) => void;
   updateCurrentIndex: (value: number) => void;
+  updateThumbsContainerElement: (value: HTMLElement) => void;
+  updateThumbElements: (value: HTMLElement[]) => void;
+  thumbElements: HTMLElement[];
+  thumbsContainerElement: HTMLElement;
   thumbsCount: number;
   thumbsGap: number;
   thumbsWidth: number;
   currentImage: CarouselImage;
   currentIndex: number;
+  imageAspectRatio: AspectRatio;
+  thumbAspectRatio: AspectRatio;
+  imageMaxHeight: number;
+  allLoadedThumbs: Promise<CarouselImage[]>;
 };
 
 export const ImageCarouselKey = Symbol() as InjectionKey<ImageCarouselProvider>;

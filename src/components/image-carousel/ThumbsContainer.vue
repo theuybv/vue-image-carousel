@@ -1,59 +1,69 @@
 <script setup lang="ts">
 
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
-import {useImageCarousel} from "./providers/useImageCarousel";
+import {computedAsync} from "@vueuse/core";
+import {ImageCarouselProvider} from "../../types";
+import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
 
-const provider = useImageCarousel()
-
-const emit = defineEmits<{
-  (e: "thumbsContainerSizeChanged"): void;
-  (e: "thumbClick", event: MouseEvent, index: number): void;
-  (e: "allThumbsLoaded", thumbImageElements: HTMLElement[], thumbsContainerElement: HTMLElement): void;
-}>();
+const {
+  context
+} = defineProps<{ context: ImageCarouselProvider }>()
 
 
-const onWindowResize = () => {
-  emit("thumbsContainerSizeChanged");
-};
+const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
 
-onMounted(() => {
-  window.addEventListener("resize", onWindowResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", onWindowResize);
-});
-
-const onImageThumbLoaded = (event: Event, index: number) => {
-  if (index >= provider.images.length - 1) {
-    emit('allThumbsLoaded', imageThumbRefs.value, thumbsContainerRef.value)
-  }
-}
-
-const thumbsContainerRef = ref()
-const imageThumbRefs = ref([...new Array(provider.images.length)])
-
-
-const onImageThumbClick = (event: MouseEvent, index: number) => {
   const timeout = setTimeout(() => {
-    emit('thumbClick', event, index)
-    provider.updateCurrentIndex(index)
+    const {
+      thumbElements,
+      thumbElementsInView,
+    } = getImageThumbsInOutView(context.thumbElements, context.thumbsContainerElement)
+
+    const {firstInView, lastInView, nextInToView, prevInToView} =
+        getThumbsIterator(thumbElements, thumbElementsInView)
+
+    if (lastInView.index === clickedIndex && nextInToView) {
+      context.thumbsContainerElement.scroll({
+        left: context.thumbsContainerElement.scrollLeft + nextInToView.element.offsetWidth + 8,
+        behavior: 'smooth',
+      })
+    } else if (firstInView.index === clickedIndex && prevInToView) {
+      context.thumbsContainerElement.scroll({
+        left: context.thumbsContainerElement.scrollLeft - prevInToView.element.offsetWidth - 8,
+        behavior: 'smooth',
+      })
+    }
+    context.updateCurrentIndex(clickedIndex)
     clearTimeout(timeout)
   }, 20)
+
+
 }
+const thumbsContainerRef = ref()
+const imageThumbRefs = ref([...new Array(context.images.length)])
+
+const thumbImages = computedAsync(
+    async () => {
+      return await context.allLoadedThumbs
+    },
+    [],
+)
+
+onMounted(() => {
+  context.updateThumbElements(imageThumbRefs.value)
+  context.updateThumbsContainerElement(thumbsContainerRef.value)
+})
 
 </script>
 
 <template>
   <div class="ThumbsContainer flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
-       :style="{width: provider.imageContainerWidth + 'px'}">
-    <div v-for="(item, index) in provider.images" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
-      <ImageThumb @click="(event:MouseEvent) => onImageThumbClick(event, index)"
-                  :aspectRatio="3/2"
-                  :width="provider.thumbsWidth || 0"
-                  :image="item"
-                  :onImageThumbLoaded="(event: Event) => onImageThumbLoaded(event, index)"/>
+       :style="{width: context.imageContainerWidth + 'px'}">
+    <div v-for="(item, index) in thumbImages" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
+      <ImageThumb @click="(event:MouseEvent) => onThumbClick(event, index)"
+                  :aspectRatio="context.thumbAspectRatio"
+                  :width="context.thumbsWidth"
+                  :image="item"/>
     </div>
   </div>
 </template>

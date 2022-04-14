@@ -1,33 +1,18 @@
 <script setup lang="ts">
-import {AspectRatio, CarouselImage} from "../../types";
-import {onMounted, onUnmounted, ref} from "vue";
-import {useImageCarousel} from "./providers/useImageCarousel";
+import {ImageCarouselProvider} from "../../types";
+import {ref, watch} from "vue";
+import {useElementSize} from '@vueuse/core'
 
-const provider = useImageCarousel()
+const {
+  context
+} = defineProps<{ context: ImageCarouselProvider }>()
 
-export type ImageDisplayProps = {
-  image: CarouselImage;
-  aspectRatio?: AspectRatio;
-  imageMaxHeight?: number;
-}
-const {image, aspectRatio, imageMaxHeight} = withDefaults(
-    defineProps<ImageDisplayProps>(),
-    {
-      aspectRatio: AspectRatio["3/2"],
-      imageMaxHeight: 400,
-    }
-);
+const imageRef = ref<HTMLImageElement | null>(null);
+const {width} = useElementSize(imageRef)
 
-
-const imageRef = ref<HTMLImageElement>(document.createElement("img"));
-
-const onWindowResize = () => {
-  provider?.updateImageContainerWidth(imageRef.value.width)
-};
-
-onMounted(() => window.addEventListener("resize", onWindowResize));
-
-onUnmounted(() => window.removeEventListener("resize", onWindowResize));
+watch(width, () => {
+  context.updateImageContainerWidth(width.value)
+})
 
 
 </script>
@@ -35,13 +20,12 @@ onUnmounted(() => window.removeEventListener("resize", onWindowResize));
 <template>
   <figure
       class="ImageDisplay"
-      :style="{ maxHeight: `${imageMaxHeight}px`, aspectRatio: aspectRatio.toString()}"
+      :style="{ maxHeight: `${context.imageMaxHeight}px`, aspectRatio: context.imageAspectRatio.toString()}"
   >
     <img
-        @load="onWindowResize"
-        :src="image.imageSrc"
-        :alt="image.alt"
-        :style="{ aspectRatio: aspectRatio.toString() }"
+        :src="context.currentImage.imageSrc"
+        :alt="context.currentImage.alt"
+        :style="{ aspectRatio: context.imageAspectRatio.toString() }"
         ref="imageRef"
     />
   </figure>
