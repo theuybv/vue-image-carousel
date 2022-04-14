@@ -5,11 +5,11 @@ import ThumbsContainer from "./ThumbsContainer.vue";
 import ImageCarouselProvider from "./providers/ImageCarouselProvider.vue";
 
 export type ImageCarouselOptions = {
-  imageAspectRatio: AspectRatio
-  thumbAspectRatio: AspectRatio
-  imageMaxHeight: number
-  thumbsCount: number
-  thumbsGap: number
+  imageAspectRatio?: AspectRatio
+  thumbAspectRatio?: AspectRatio
+  imageMaxHeight?: number
+  thumbsCount?: number
+  thumbsGap?: number
 }
 export type ImageCarouselProps = {
   images: CarouselImage[]
