@@ -1,29 +1,33 @@
 <script setup lang="ts">
-import {ref} from "@vue/reactivity";
 import ImageDisplay from "./ImageDisplay.vue";
-import {CarouselImage, ImageCarouselKey} from "../../types";
+import {AspectRatio, CarouselImage} from "../../types";
 import ThumbsContainer from "./ThumbsContainer.vue";
-import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
 import ImageCarouselProvider from "./providers/ImageCarouselProvider.vue";
-import {inject} from "vue";
 
-
+export type ImageCarouselOptions = {
+  imageAspectRatio: AspectRatio
+  thumbAspectRatio: AspectRatio
+  imageMaxHeight: number
+  thumbsCount: number
+  thumbsGap: number
+}
 export type ImageCarouselProps = {
   images: CarouselImage[]
+  options: ImageCarouselOptions
 }
-const {images} = defineProps<ImageCarouselProps>()
+const {images, options} = defineProps<ImageCarouselProps>()
 
 </script>
 
 
 <template>
-  <ImageCarouselProvider :images="images" #="{context}">
+  <ImageCarouselProvider :images="images" #="{context}" :options="options">
     <div class="flex flex-col gap-2">
       <ImageDisplay
           :key="context.currentImage.imageSrc"
           :context="context"
       />
-      <ThumbsContainer :context="context" />
+      <ThumbsContainer :context="context"/>
     </div>
   </ImageCarouselProvider>
 </template>

@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import {provide, reactive} from "vue";
 import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProvider} from "../../../types";
+import {ImageCarouselOptions} from "../ImageCarousel.vue";
 
-const {images} = defineProps<{ images: CarouselImage[] }>()
+const {images, options} = defineProps<{
+  images: CarouselImage[],
+  options: ImageCarouselOptions
+}>()
 
 const reactiveContext = reactive<ImageCarouselProvider>({
-  imageAspectRatio: AspectRatio['3/2'],
-  thumbAspectRatio: AspectRatio['4/3'],
-  imageMaxHeight: 400,
-  thumbsCount: 6,
-  thumbsGap: 8,
+  imageAspectRatio: options.imageAspectRatio || AspectRatio['3/2'],
+  thumbAspectRatio: options.thumbAspectRatio || AspectRatio['4/3'],
+  imageMaxHeight: options.imageMaxHeight || 400,
+  thumbsCount: options.thumbsCount || 6,
+  thumbsGap: options.thumbsGap || 8,
   images,
   updateThumbElements(value: HTMLElement[]) {
     this.thumbElements = value
