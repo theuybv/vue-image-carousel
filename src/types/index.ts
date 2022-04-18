@@ -22,22 +22,19 @@ export type ThumbsInOutView = {
 };
 
 export type ImageCarouselProvider = {
-  images: CarouselImage[];
+  test?: string,
+  readonly images: CarouselImage[];
   imageContainerWidth: number;
-  updateImageContainerWidth: (value: number) => void;
-  updateCurrentIndex: (value: number) => void;
-  updateThumbsContainerElement: (value: HTMLElement) => void;
-  updateThumbElements: (value: HTMLElement[]) => void;
   thumbElements: HTMLElement[];
   thumbsContainerElement: HTMLElement;
-  thumbsCount: number;
-  thumbsGap: number;
-  thumbsWidth: number;
-  currentImage: CarouselImage;
+  readonly thumbsCount: number;
+  readonly thumbsGap: number;
+  readonly thumbsWidth: number;
+  readonly currentImage: CarouselImage;
   currentIndex: number;
-  imageAspectRatio: AspectRatio;
-  thumbAspectRatio: AspectRatio;
-  imageMaxHeight: number;
+  readonly imageAspectRatio: AspectRatio;
+  readonly thumbAspectRatio: AspectRatio;
+  readonly imageMaxHeight: number;
   allLoadedThumbs: Promise<CarouselImage[]>;
 };
 

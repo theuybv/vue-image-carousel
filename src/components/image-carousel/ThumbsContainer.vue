@@ -33,7 +33,7 @@ const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
         behavior: 'smooth',
       })
     }
-    context.updateCurrentIndex(clickedIndex)
+    context.currentIndex = clickedIndex
     clearTimeout(timeout)
   }, 20)
 
@@ -50,8 +50,8 @@ const thumbImages = computedAsync(
 )
 
 onMounted(() => {
-  context.updateThumbElements(imageThumbRefs.value)
-  context.updateThumbsContainerElement(thumbsContainerRef.value)
+  context.thumbElements = imageThumbRefs.value
+  context.thumbsContainerElement = thumbsContainerRef.value
 })
 
 </script>

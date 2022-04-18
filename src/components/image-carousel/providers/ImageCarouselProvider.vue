@@ -15,22 +15,10 @@ const reactiveContext = reactive<ImageCarouselProvider>({
   thumbsCount: options.thumbsCount || 6,
   thumbsGap: options.thumbsGap || 8,
   images,
-  updateThumbElements(value: HTMLElement[]) {
-    this.thumbElements = value
-  },
   thumbElements: [],
   thumbsContainerElement: document.createElement('div'),
-  updateThumbsContainerElement(value: HTMLElement) {
-    this.thumbsContainerElement = value;
-  },
   currentIndex: 0,
-  updateCurrentIndex(value: number) {
-    this.currentIndex = value
-  },
   imageContainerWidth: 0,
-  updateImageContainerWidth(value: number) {
-    this.imageContainerWidth = value;
-  },
   get thumbsWidth() {
     return (
         this.imageContainerWidth / this.thumbsCount -

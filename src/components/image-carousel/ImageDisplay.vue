@@ -11,9 +11,8 @@ const imageRef = ref<HTMLImageElement | null>(null);
 const {width} = useElementSize(imageRef)
 
 watch(width, () => {
-  context.updateImageContainerWidth(width.value)
+  context.imageContainerWidth = width.value
 })
-
 
 </script>
 
