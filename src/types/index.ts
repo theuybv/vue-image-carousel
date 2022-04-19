@@ -22,20 +22,21 @@ export type ThumbsInOutView = {
 };
 
 export type ImageCarouselProvider = {
-  test?: string,
   readonly images: CarouselImage[];
-  imageContainerWidth: number;
-  thumbElements: HTMLElement[];
-  thumbsContainerElement: HTMLElement;
   readonly thumbsCount: number;
   readonly thumbsGap: number;
   readonly thumbsWidth: number;
   readonly currentImage: CarouselImage;
-  currentIndex: number;
   readonly imageAspectRatio: AspectRatio;
   readonly thumbAspectRatio: AspectRatio;
   readonly imageMaxHeight: number;
+  readonly thumbsScrollDelay: number;
+  imageContainerWidth: number;
+  thumbElements: HTMLElement[];
+  thumbsContainerElement: HTMLElement;
+  currentIndex: number;
   allLoadedThumbs: Promise<CarouselImage[]>;
+  thumbsContainerScrollEnd: () => void;
 };
 
 export const ImageCarouselKey = Symbol() as InjectionKey<ImageCarouselProvider>;

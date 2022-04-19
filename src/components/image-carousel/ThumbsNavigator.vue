@@ -1,0 +1,95 @@
+<script setup lang="ts">
+
+import {ref, watch} from "vue";
+import {ImageCarouselProvider} from "../../types";
+import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
+import {useElementSize} from "@vueuse/core";
+
+
+const {
+  context
+} = defineProps<{ context: ImageCarouselProvider }>()
+const getThumbs = () => {
+  const {
+    thumbElements,
+    thumbElementsInView,
+  } = getImageThumbsInOutView(context.thumbElements, context.thumbsContainerElement)
+
+  const {nextInToView, prevInToView} =
+      getThumbsIterator(thumbElements, thumbElementsInView)
+
+  return {
+    nextInToView,
+    prevInToView
+  }
+}
+
+const {height} = useElementSize(context.thumbsContainerElement)
+
+const navPosY = ref<number>()
+
+watch(height, () => {
+  navPosY.value = context.thumbsContainerElement.offsetHeight / 2 - 32 / 2
+})
+
+const showPrev = ref<boolean>((() => {
+  const {prevInToView} = getThumbs()
+  return prevInToView !== undefined;
+})())
+
+const showNext = ref<boolean>((() => {
+  const {nextInToView} = getThumbs()
+  return nextInToView !== undefined;
+})())
+
+context.thumbsContainerScrollEnd = () => {
+  const {prevInToView, nextInToView} = getThumbs()
+  showPrev.value = prevInToView !== undefined;
+  showNext.value = nextInToView !== undefined;
+}
+
+const onNextClick = (_event: MouseEvent) => {
+  const timeout = setTimeout(() => {
+    const {nextInToView} = getThumbs()
+    if (nextInToView) {
+      context.thumbsContainerElement.scroll({
+        left: context.thumbsContainerElement.scrollLeft + nextInToView.element.offsetWidth + 8,
+        behavior: 'smooth',
+      })
+    }
+    clearTimeout(timeout)
+  }, context.thumbsScrollDelay)
+}
+
+const onPrevClick = (_event: MouseEvent) => {
+  const timeout = setTimeout(() => {
+    const {prevInToView} = getThumbs()
+    if (prevInToView) {
+      context.thumbsContainerElement.scroll({
+        left: context.thumbsContainerElement.scrollLeft - prevInToView.element.offsetWidth - 8,
+        behavior: 'smooth',
+      })
+      clearTimeout(timeout)
+    }
+  }, context.thumbsScrollDelay)
+}
+
+</script>
+<template>
+  <nav class="absolute">
+    <div class="relative" :style="{top: navPosY + 'px', width: context.imageContainerWidth + 'px'}">
+      <button class="absolute left-0 p-1 bg-white" v-if="showPrev" @click="onPrevClick($event)">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+             stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button class="absolute right-0 p-1 bg-white" v-if="showNext" @click="onNextClick($event)">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+             stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+</template>

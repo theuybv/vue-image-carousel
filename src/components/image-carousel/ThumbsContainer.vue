@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
 import {computedAsync} from "@vueuse/core";
 import {ImageCarouselProvider} from "../../types";
 import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
+import ThumbsNavigator from "./ThumbsNavigator.vue";
 
 const {
   context
@@ -35,7 +36,7 @@ const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
     }
     context.currentIndex = clickedIndex
     clearTimeout(timeout)
-  }, 20)
+  }, context.thumbsScrollDelay)
 
 
 }
@@ -52,12 +53,27 @@ const thumbImages = computedAsync(
 onMounted(() => {
   context.thumbElements = imageThumbRefs.value
   context.thumbsContainerElement = thumbsContainerRef.value
+  thumbsContainerRef.value.addEventListener('scroll', containerScrollEvent, false);
 })
+
+let timer: NodeJS.Timer;
+const containerScrollEvent = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+  timer = setTimeout(context.thumbsContainerScrollEnd, context.thumbsScrollDelay);
+}
+
+onUnmounted(() => {
+  clearTimeout(timer)
+  thumbsContainerRef.value.removeEventListener('scroll', containerScrollEvent, false);
+})
+
 
 </script>
 
 <template>
-  <div class="ThumbsContainer flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
+  <div class="flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
        :style="{width: context.imageContainerWidth + 'px'}">
     <div v-for="(item, index) in thumbImages" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
       <ImageThumb @click="onThumbClick($event, index)"
@@ -65,6 +81,7 @@ onMounted(() => {
                   :width="context.thumbsWidth"
                   :image="item"/>
     </div>
+    <ThumbsNavigator v-if="thumbImages.length" :context="context"/>
   </div>
 </template>
 

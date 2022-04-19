@@ -9,6 +9,9 @@ const {images, options} = defineProps<{
 }>()
 
 const reactiveContext = reactive<ImageCarouselProvider>({
+  thumbsContainerScrollEnd: () => {
+  },
+  thumbsScrollDelay: 150,
   imageAspectRatio: options.imageAspectRatio || AspectRatio['3/2'],
   thumbAspectRatio: options.thumbAspectRatio || AspectRatio['4/3'],
   imageMaxHeight: options.imageMaxHeight || 400,

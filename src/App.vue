@@ -5,15 +5,16 @@ import {AspectRatio, CarouselImage} from "./types";
 import {ref} from "vue";
 
 
-const images = ref<CarouselImage[]>(getDemoImages(10, AspectRatio['3/2']))
+const images1 = ref<CarouselImage[]>(getDemoImages(10, AspectRatio['1/1']))
+const images2 = ref<CarouselImage[]>(getDemoImages(4, AspectRatio['3/2']))
 
 </script>
 
 <template>
   <div class="container mx-auto px-4">
     <div class="flex flex-col gap-8">
-      <ImageCarousel :images="images" :options="{thumbsCount: 3, imageAspectRatio: AspectRatio['1/1']}"/>
-      <ImageCarousel :images="images" :options="{thumbsCount: 6}"/>
+      <ImageCarousel :images="images1" :options="{thumbsCount: 3, imageAspectRatio: AspectRatio['3/2']}"/>
+      <ImageCarousel :images="images2" :options="{thumbsCount: 6}"/>
     </div>
   </div>
 </template>
