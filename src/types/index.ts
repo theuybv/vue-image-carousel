@@ -36,7 +36,6 @@ export type ImageCarouselProvider = {
   thumbsContainerElement: HTMLElement;
   currentIndex: number;
   allLoadedThumbs: Promise<CarouselImage[]>;
-  thumbsContainerScrollEnd: () => void;
 };
 
 export const ImageCarouselKey = Symbol() as InjectionKey<ImageCarouselProvider>;

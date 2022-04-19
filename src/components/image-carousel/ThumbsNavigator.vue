@@ -3,12 +3,12 @@
 import {ref, watch} from "vue";
 import {ImageCarouselProvider} from "../../types";
 import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
-import {useElementSize} from "@vueuse/core";
-
+import {useElementSize, useScroll} from "@vueuse/core";
 
 const {
   context
 } = defineProps<{ context: ImageCarouselProvider }>()
+
 const getThumbs = () => {
   const {
     thumbElements,
@@ -25,28 +25,29 @@ const getThumbs = () => {
 }
 
 const {height} = useElementSize(context.thumbsContainerElement)
+const {isScrolling} = useScroll(context.thumbsContainerElement)
 
 const navPosY = ref<number>()
-
-watch(height, () => {
-  navPosY.value = context.thumbsContainerElement.offsetHeight / 2 - 32 / 2
-})
-
 const showPrev = ref<boolean>((() => {
   const {prevInToView} = getThumbs()
   return prevInToView !== undefined;
 })())
-
 const showNext = ref<boolean>((() => {
   const {nextInToView} = getThumbs()
   return nextInToView !== undefined;
 })())
 
-context.thumbsContainerScrollEnd = () => {
-  const {prevInToView, nextInToView} = getThumbs()
-  showPrev.value = prevInToView !== undefined;
-  showNext.value = nextInToView !== undefined;
-}
+watch(height, () => {
+  navPosY.value = context.thumbsContainerElement.offsetHeight / 2 - 32 / 2
+})
+
+watch(isScrolling, () => {
+  if (!isScrolling.value) {
+    const {prevInToView, nextInToView} = getThumbs()
+    showPrev.value = prevInToView !== undefined;
+    showNext.value = nextInToView !== undefined;
+  }
+})
 
 const onNextClick = (_event: MouseEvent) => {
   const timeout = setTimeout(() => {

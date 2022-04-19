@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
 import {computedAsync} from "@vueuse/core";
 import {ImageCarouselProvider} from "../../types";
@@ -53,22 +53,7 @@ const thumbImages = computedAsync(
 onMounted(() => {
   context.thumbElements = imageThumbRefs.value
   context.thumbsContainerElement = thumbsContainerRef.value
-  thumbsContainerRef.value.addEventListener('scroll', containerScrollEvent, false);
 })
-
-let timer: NodeJS.Timer;
-const containerScrollEvent = () => {
-  if (timer) {
-    clearTimeout(timer);
-  }
-  timer = setTimeout(context.thumbsContainerScrollEnd, context.thumbsScrollDelay);
-}
-
-onUnmounted(() => {
-  clearTimeout(timer)
-  thumbsContainerRef.value.removeEventListener('scroll', containerScrollEvent, false);
-})
-
 
 </script>
 
