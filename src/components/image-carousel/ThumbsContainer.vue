@@ -60,13 +60,17 @@ onMounted(() => {
 <template>
   <div class="flex flex-row gap-2 overflow-hidden" ref="thumbsContainerRef"
        :style="{width: context.imageContainerWidth + 'px'}">
+
     <div v-for="(item, index) in thumbImages" :key="item.thumbSrc" :ref="(el) => imageThumbRefs[index] = el">
-      <ImageThumb @click="onThumbClick($event, index)"
+      <ImageThumb :active="context.currentIndex === index"
+                  @click="onThumbClick($event, index)"
                   :aspectRatio="context.thumbAspectRatio"
                   :width="context.thumbsWidth"
-                  :image="item"/>
+                  :image="item" :key="index" />
     </div>
+
     <ThumbsNavigator v-if="thumbImages.length" :context="context"/>
   </div>
 </template>
-
+<style scoped>
+</style>
