@@ -23,10 +23,10 @@ const {images, options} = defineProps<ImageCarouselProps>()
 <template>
   <ImageCarouselProvider :images="images" #="{context}" :options="options">
     <div class="flex flex-col gap-2">
-      <ImageDisplay
-          :key="context.currentImage.imageSrc"
-          :context="context"
-      />
+        <ImageDisplay
+            :key="context.currentImage.imageSrc"
+            :context="context"
+        />
       <ThumbsContainer :context="context"/>
     </div>
   </ImageCarouselProvider>
