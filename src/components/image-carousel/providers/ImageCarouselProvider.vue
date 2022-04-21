@@ -4,7 +4,7 @@ import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProviderProps
 
 const {images, options} = defineProps<{
   images: CarouselImage[],
-  options: ImageCarouselProviderProps
+  options: Partial<ImageCarouselProviderProps>
 }>()
 
 const reactiveContext = reactive<ImageCarouselProviderProps>({

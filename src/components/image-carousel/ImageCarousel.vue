@@ -6,7 +6,7 @@ import ImageCarouselProvider from "./providers/ImageCarouselProvider.vue";
 
 export type ImageCarouselProps = {
   images: CarouselImage[]
-  options: ImageCarouselProviderProps
+  options: Partial<ImageCarouselProviderProps>
 }
 const {images, options} = defineProps<ImageCarouselProps>()
 
