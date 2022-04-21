@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {provide, reactive} from "vue";
-import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProvider} from "../types";
-import {ImageCarouselOptions} from "../ImageCarousel.vue";
+import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProviderProps} from "../types";
 
 const {images, options} = defineProps<{
   images: CarouselImage[],
-  options: ImageCarouselOptions
+  options: ImageCarouselProviderProps
 }>()
 
-const reactiveContext = reactive<ImageCarouselProvider>({
+const reactiveContext = reactive<ImageCarouselProviderProps>({
+  hasIndicator: options.hasIndicator || false,
   thumbsScrollDelay: 80,
   imageAspectRatio: options.imageAspectRatio || AspectRatio['3/2'],
   thumbAspectRatio: options.thumbAspectRatio || AspectRatio['4/3'],

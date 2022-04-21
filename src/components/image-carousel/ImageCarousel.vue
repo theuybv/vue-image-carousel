@@ -1,19 +1,12 @@
 <script setup lang="ts">
 import ImageDisplay from "./ImageDisplay.vue";
-import {AspectRatio, CarouselImage} from "./types";
+import {CarouselImage, ImageCarouselProviderProps} from "./types";
 import ThumbsContainer from "./ThumbsContainer.vue";
 import ImageCarouselProvider from "./providers/ImageCarouselProvider.vue";
 
-export type ImageCarouselOptions = {
-  imageAspectRatio?: AspectRatio
-  thumbAspectRatio?: AspectRatio
-  imageMaxHeight?: number
-  thumbsCount?: number
-  thumbsGap?: number
-}
 export type ImageCarouselProps = {
   images: CarouselImage[]
-  options: ImageCarouselOptions
+  options: ImageCarouselProviderProps
 }
 const {images, options} = defineProps<ImageCarouselProps>()
 
@@ -23,11 +16,11 @@ const {images, options} = defineProps<ImageCarouselProps>()
 <template>
   <ImageCarouselProvider :images="images" #="{context}" :options="options">
     <div class="flex flex-col gap-2">
-        <ImageDisplay
-            :key="context.currentImage.imageSrc"
-            :context="context"
-        />
-      <ThumbsContainer :context="context"/>
+      <ImageDisplay
+          :key="context.currentImage.imageSrc"
+          :context="context"
+      />
+      <ThumbsContainer v-if="!context.hasIndicator" :context="context"/>
     </div>
   </ImageCarouselProvider>
 </template>

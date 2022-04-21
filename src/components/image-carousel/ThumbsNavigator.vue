@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
-import {ImageCarouselProvider} from "./types";
+import {ImageCarouselProviderProps} from "./types";
 import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import {useElementSize, useScroll} from "@vueuse/core";
 
 const {
   context
-} = defineProps<{ context: ImageCarouselProvider }>()
+} = defineProps<{ context: ImageCarouselProviderProps }>()
 
 const getThumbs = () => {
   const {

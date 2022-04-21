@@ -3,13 +3,13 @@
 import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
 import {computedAsync} from "@vueuse/core";
-import {ImageCarouselProvider} from "./types";
+import {ImageCarouselProviderProps} from "./types";
 import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import ThumbsNavigator from "./ThumbsNavigator.vue";
 
 const {
   context
-} = defineProps<{ context: ImageCarouselProvider }>()
+} = defineProps<{ context: ImageCarouselProviderProps }>()
 
 
 const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
