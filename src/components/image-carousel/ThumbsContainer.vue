@@ -3,8 +3,8 @@
 import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
 import {computedAsync} from "@vueuse/core";
-import {ImageCarouselProvider} from "../../types";
-import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
+import {ImageCarouselProvider} from "./types";
+import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import ThumbsNavigator from "./ThumbsNavigator.vue";
 
 const {

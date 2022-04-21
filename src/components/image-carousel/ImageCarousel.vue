@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ImageDisplay from "./ImageDisplay.vue";
-import {AspectRatio, CarouselImage} from "../../types";
+import {AspectRatio, CarouselImage} from "./types";
 import ThumbsContainer from "./ThumbsContainer.vue";
 import ImageCarouselProvider from "./providers/ImageCarouselProvider.vue";
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
-import {ImageCarouselProvider} from "../../types";
-import {getImageThumbsInOutView, getThumbsIterator} from "../../utils";
+import {ImageCarouselProvider} from "./types";
+import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import {useElementSize, useScroll} from "@vueuse/core";
 
 const {

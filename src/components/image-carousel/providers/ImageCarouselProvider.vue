@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {provide, reactive} from "vue";
-import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProvider} from "../../../types";
+import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProvider} from "../types";
 import {ImageCarouselOptions} from "../ImageCarousel.vue";
 
 const {images, options} = defineProps<{

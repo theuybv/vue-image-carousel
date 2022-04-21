@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ImageCarouselProvider} from "../../types";
+import {ImageCarouselProvider} from "./types";
 import {ref, watch} from "vue";
 import {useElementSize} from '@vueuse/core'
 

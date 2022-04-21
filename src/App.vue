@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ImageCarousel from './components/image-carousel/ImageCarousel.vue';
-import {getDemoImages} from "./data";
-import {AspectRatio, CarouselImage} from "./types";
+import {getDemoImages} from "./components/image-carousel/data";
+import {AspectRatio, CarouselImage} from "./components/image-carousel/types";
 import {ref} from "vue";
 
 
