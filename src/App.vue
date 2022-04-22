@@ -12,7 +12,7 @@ const images2 = ref<CarouselImage[]>(getDemoImages(4, AspectRatio['3/2']))
 
 <template>
   <div class="container mx-auto p-8">
-    <div class="flex flex-wrap flex-row gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <ImageCarousel :images="images1"
                      :options="{ thumbsCount: 3, imageAspectRatio: AspectRatio['3/2']}"/>
       <ImageCarousel :images="images2" :options="{hasIndicator: true, thumbsCount: 6}"/>

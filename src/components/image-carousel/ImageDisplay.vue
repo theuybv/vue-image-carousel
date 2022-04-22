@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {ImageCarouselProviderProps} from "./types";
 import {ref, watch} from "vue";
-import {useElementSize} from '@vueuse/core'
+import {computedAsync, useElementSize} from '@vueuse/core'
 import ThumbsIndicator from "./ThumbsIndicator.vue";
+import Loader from 'vue-spinner/src/BeatLoader.vue'
+import {loadImage} from "./utils";
 
 const {
   context
@@ -15,6 +17,13 @@ watch(width, () => {
   context.imageContainerWidth = width.value
 })
 
+const loadedImage = computedAsync(
+    async () => {
+      return await loadImage(context.currentImage.imageSrc)
+    },
+    undefined,
+)
+
 </script>
 
 <template>
@@ -22,7 +31,8 @@ watch(width, () => {
       class="relative bg-black"
       :style="{ maxHeight: `${context.imageMaxHeight}px`, aspectRatio: context.imageAspectRatio.toString()}"
   >
-    <Transition appear name="fade">
+    <Loader color="#fff" class="flex w-full h-full justify-center items-center" v-if="!loadedImage"/>
+    <Transition v-else appear name="fade">
       <img
           class="bg-black w-full h-full object-contain"
           :src="context.currentImage.imageSrc"
