@@ -42,13 +42,19 @@ const imageCarouselDemoList: {
 
 <template>
   <div class="container mx-auto p-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="gap-2 flex flex-col text-xs" v-for="(item, index) in imageCarouselDemoList">
+    <div class="grid grid-cols-1 md:grid-cols-2  gap-8 ">
+      <div class="gap-2 flex flex-col" v-for="(item, index) in imageCarouselDemoList">
         <ImageCarousel :images="item.images"
                        :options="item.options"/>
-        <code>
-          <pre>{{ JSON.stringify(item, null, 2) }}</pre>
-        </code>
+        <ul class="prose text-center">
+          <li><strong>autoPlayMode: </strong>{{ item.options.autoPlayMode }}</li>
+          <li><strong>autoPlayTimeMs: </strong>{{ item.options.autoPlayTimeMs }}</li>
+          <li><strong>hasIndicator: </strong>{{ item.options.hasIndicator || false }}</li>
+          <li><strong>thumbsCount: </strong>{{ item.options.thumbsCount || 0 }}</li>
+          <li><strong>imageAspectRatio: </strong>{{ item.options.imageAspectRatio }}</li>
+          <li><strong>numberOfImages: </strong>{{ item.numberOfImages }}</li>
+          <li><strong>imageSourceAspectRatio: </strong>{{ item.imageSourceAspectRatio }}</li>
+        </ul>
       </div>
     </div>
   </div>
