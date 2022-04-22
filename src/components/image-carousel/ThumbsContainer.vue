@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
-import {computedAsync, useIntervalFn, useTimeoutFn} from "@vueuse/core";
+import {computedAsync} from "@vueuse/core";
 import {ImageCarouselProviderProps} from "./types";
 import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import ThumbsNavigator from "./ThumbsNavigator.vue";
@@ -20,35 +20,8 @@ const thumbImages = computedAsync(
     },
     [],
 )
-const onAutoplay = () => {
-  const nextIndex = context.currentIndex >= context.images.length - 1 ? 0 : context.currentIndex + 1
-
-  intervalFn.pause()
-  timeoutFn.stop()
-  timeoutFn.start()
-
-  context.currentIndex = nextIndex
-  const target = context.thumbElements[nextIndex];
-
-  scrollIntoView(target, {
-    scrollMode: 'if-needed',
-    block: 'nearest',
-    inline: 'nearest',
-    boundary: context.thumbsContainerElement
-  })
-}
-
-const onResumeAutoplay = () => {
-  intervalFn.resume()
-}
-
-const intervalFn = useIntervalFn(onAutoplay, 3000)
-const timeoutFn = useTimeoutFn(onResumeAutoplay, 3000)
 
 const onThumbClick = (_event: MouseEvent | undefined, clickedIndex: number) => {
-  intervalFn.pause()
-  timeoutFn.stop()
-  timeoutFn.start()
   const {
     thumbElements,
     thumbElementsInView,

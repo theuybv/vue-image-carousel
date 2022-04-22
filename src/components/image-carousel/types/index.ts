@@ -21,7 +21,7 @@ export type ThumbsInOutView = {
   isInView: boolean;
 };
 
-export type ImageCarouselProviderProps = {
+export type ImageCarouselOptions = {
   readonly images: CarouselImage[];
   readonly thumbsCount: number;
   readonly thumbsGap: number;
@@ -30,15 +30,20 @@ export type ImageCarouselProviderProps = {
   readonly imageAspectRatio: AspectRatio;
   readonly thumbAspectRatio: AspectRatio;
   readonly imageMaxHeight: number;
-  readonly thumbsScrollDelay: number;
+  readonly autoPlayTimeMs: number;
   readonly hasIndicator: boolean;
   readonly autoPlayMode: "none" | "loop" | "default";
+};
+
+export type ImageCarouselProviderProps = {
   imageContainerWidth: number;
   thumbElements: HTMLElement[];
   thumbsContainerElement: HTMLElement;
   currentIndex: number;
   allLoadedThumbs: Promise<CarouselImage[]>;
-};
+  emit: {
+    (e: "itemSelect", index: number): void;
+  };
+} & ImageCarouselOptions;
 
-export const ImageCarouselKey =
-  Symbol() as InjectionKey<ImageCarouselProviderProps>;
+export const ImageCarouselKey = Symbol();

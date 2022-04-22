@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import {provide, reactive} from "vue";
-import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselProviderProps} from "../types";
+import {AspectRatio, CarouselImage, ImageCarouselKey, ImageCarouselOptions, ImageCarouselProviderProps} from "../types";
 
 const {images, options} = defineProps<{
   images: CarouselImage[],
-  options: Partial<ImageCarouselProviderProps>
+  options: Partial<ImageCarouselOptions>
+}>()
+
+const emit = defineEmits<{
+  (e: 'itemSelect', index: number): void
 }>()
 
 const reactiveContext = reactive<ImageCarouselProviderProps>({
+  emit,
+  autoPlayTimeMs: options.autoPlayTimeMs || 5000,
   autoPlayMode: options.autoPlayMode || 'none',
   hasIndicator: options.hasIndicator || false,
-  thumbsScrollDelay: 80,
   imageAspectRatio: options.imageAspectRatio || AspectRatio['3/2'],
   thumbAspectRatio: options.thumbAspectRatio || AspectRatio['4/3'],
   imageMaxHeight: options.imageMaxHeight || 400,
@@ -32,8 +37,8 @@ const reactiveContext = reactive<ImageCarouselProviderProps>({
     return this.images[this.currentIndex];
   },
   get allLoadedThumbs() {
-    const images = this.images.map((item: CarouselImage) => {
-      return new Promise((resolve, reject) => {
+    return Promise.all(this.images.map((item: CarouselImage) => {
+      return new Promise<CarouselImage>((resolve, reject) => {
         const image = new Image()
         image.src = item.thumbSrc
         image.onload = () => {
@@ -43,8 +48,7 @@ const reactiveContext = reactive<ImageCarouselProviderProps>({
           reject()
         }
       })
-    })
-    return Promise.all(images)
+    }))
   }
 })
 provide(ImageCarouselKey, reactiveContext)
@@ -52,5 +56,5 @@ provide(ImageCarouselKey, reactiveContext)
 </script>
 
 <template>
-  <slot v-bind:context="reactiveContext"></slot>
+  <slot :context="reactiveContext"></slot>
 </template>

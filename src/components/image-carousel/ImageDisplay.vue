@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {ImageCarouselProviderProps} from "./types";
 import {ref, watch} from "vue";
-import {computedAsync, useElementSize} from '@vueuse/core'
+import {computedAsync, useElementSize, useIntervalFn, useScroll} from '@vueuse/core'
 import ThumbsIndicator from "./ThumbsIndicator.vue";
 import Loader from 'vue-spinner/src/BeatLoader.vue'
 import {loadImage} from "./utils";
+import scrollIntoView from "smooth-scroll-into-view-if-needed";
 
 const {
   context
@@ -24,6 +25,39 @@ const loadedImage = computedAsync(
     undefined,
 )
 
+const {isScrolling} = useScroll(context.thumbsContainerElement)
+
+
+const onAutoplay = () => {
+  const isLastIndex = context.currentIndex >= context.images.length - 1;
+  if (isLastIndex && context.autoPlayMode === 'default') {
+    intervalFn.pause()
+    return
+  }
+
+  const nextIndex = isLastIndex ? 0 : context.currentIndex + 1
+  context.currentIndex = nextIndex
+  const target = context.thumbElements[nextIndex];
+  try {
+    scrollIntoView(target, {
+      scrollMode: 'if-needed',
+      block: 'nearest',
+      inline: 'nearest',
+      boundary: context.thumbsContainerElement
+    })
+  } catch (e) {
+
+  }
+}
+
+const intervalFn = useIntervalFn(onAutoplay, context.autoPlayTimeMs, {immediate: context.autoPlayMode !== 'none'})
+
+watch([() => context.currentIndex, isScrolling], ([clickedIndex, isScrolling]) => {
+  if (isScrolling) {
+
+  }
+})
+
 </script>
 
 <template>
@@ -41,7 +75,7 @@ const loadedImage = computedAsync(
           ref="imageRef"
       />
     </Transition>
-    <ThumbsIndicator v-if="context.hasIndicator"/>
+    <ThumbsIndicator v-if="context.hasIndicator" :context="context"/>
   </figure>
 </template>
 
