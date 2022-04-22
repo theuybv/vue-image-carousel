@@ -32,6 +32,7 @@ export type ImageCarouselProviderProps = {
   readonly imageMaxHeight: number;
   readonly thumbsScrollDelay: number;
   readonly hasIndicator: boolean;
+  readonly autoPlayMode: "none" | "loop" | "default";
   imageContainerWidth: number;
   thumbElements: HTMLElement[];
   thumbsContainerElement: HTMLElement;

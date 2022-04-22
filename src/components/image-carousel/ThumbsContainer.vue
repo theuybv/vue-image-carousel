@@ -1,45 +1,16 @@
 <script setup lang="ts">
-
 import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
-import {computedAsync} from "@vueuse/core";
+import {computedAsync, useIntervalFn, useTimeoutFn} from "@vueuse/core";
 import {ImageCarouselProviderProps} from "./types";
 import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import ThumbsNavigator from "./ThumbsNavigator.vue";
+import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 const {
   context
 } = defineProps<{ context: ImageCarouselProviderProps }>()
 
-
-const onThumbClick = (event: MouseEvent, clickedIndex: number) => {
-
-  const timeout = setTimeout(() => {
-    const {
-      thumbElements,
-      thumbElementsInView,
-    } = getImageThumbsInOutView(context.thumbElements, context.thumbsContainerElement)
-
-    const {firstInView, lastInView, nextInToView, prevInToView} =
-        getThumbsIterator(thumbElements, thumbElementsInView)
-
-    if (lastInView.index === clickedIndex && nextInToView) {
-      context.thumbsContainerElement.scroll({
-        left: context.thumbsContainerElement.scrollLeft + nextInToView.element.offsetWidth + 8,
-        behavior: 'smooth',
-      })
-    } else if (firstInView.index === clickedIndex && prevInToView) {
-      context.thumbsContainerElement.scroll({
-        left: context.thumbsContainerElement.scrollLeft - prevInToView.element.offsetWidth - 8,
-        behavior: 'smooth',
-      })
-    }
-    context.currentIndex = clickedIndex
-    clearTimeout(timeout)
-  }, context.thumbsScrollDelay)
-
-
-}
 const thumbsContainerRef = ref()
 const imageThumbRefs = ref([...new Array(context.images.length)])
 
@@ -49,6 +20,61 @@ const thumbImages = computedAsync(
     },
     [],
 )
+const onAutoplay = () => {
+  const nextIndex = context.currentIndex >= context.images.length - 1 ? 0 : context.currentIndex + 1
+
+  intervalFn.pause()
+  timeoutFn.stop()
+  timeoutFn.start()
+
+  context.currentIndex = nextIndex
+  const target = context.thumbElements[nextIndex];
+
+  scrollIntoView(target, {
+    scrollMode: 'if-needed',
+    block: 'nearest',
+    inline: 'nearest',
+    boundary: context.thumbsContainerElement
+  })
+}
+
+const onResumeAutoplay = () => {
+  intervalFn.resume()
+}
+
+const intervalFn = useIntervalFn(onAutoplay, 3000)
+const timeoutFn = useTimeoutFn(onResumeAutoplay, 3000)
+
+const onThumbClick = (_event: MouseEvent | undefined, clickedIndex: number) => {
+  intervalFn.pause()
+  timeoutFn.stop()
+  timeoutFn.start()
+  const {
+    thumbElements,
+    thumbElementsInView,
+  } = getImageThumbsInOutView(context.thumbElements, context.thumbsContainerElement)
+
+  const {firstInView, lastInView, nextInToView, prevInToView} =
+      getThumbsIterator(thumbElements, thumbElementsInView)
+
+  if (lastInView.index === clickedIndex && nextInToView) {
+    scrollIntoView(nextInToView.element, {
+      scrollMode: 'if-needed',
+      block: 'nearest',
+      inline: 'nearest',
+      boundary: context.thumbsContainerElement
+    })
+  } else if (firstInView.index === clickedIndex && prevInToView) {
+    scrollIntoView(prevInToView.element, {
+      scrollMode: 'if-needed',
+      block: 'nearest',
+      inline: 'nearest',
+      boundary: context.thumbsContainerElement
+    })
+  }
+  context.currentIndex = clickedIndex
+}
+
 
 onMounted(() => {
   context.thumbElements = imageThumbRefs.value
@@ -66,7 +92,7 @@ onMounted(() => {
                   @click="onThumbClick($event, index)"
                   :aspectRatio="context.thumbAspectRatio"
                   :width="context.thumbsWidth"
-                  :image="item" :key="index" />
+                  :image="item" :key="index"/>
     </div>
 
     <ThumbsNavigator v-if="thumbImages.length" :context="context"/>

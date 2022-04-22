@@ -4,6 +4,7 @@ import {ref, watch} from "vue";
 import {ImageCarouselProviderProps} from "./types";
 import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import {useElementSize, useScroll} from "@vueuse/core";
+import scrollIntoView from "smooth-scroll-into-view-if-needed";
 
 const {
   context
@@ -50,29 +51,27 @@ watch(isScrolling, () => {
 })
 
 const onNextClick = (_event: MouseEvent) => {
-  const timeout = setTimeout(() => {
-    const {nextInToView} = getThumbs()
-    if (nextInToView) {
-      context.thumbsContainerElement.scroll({
-        left: context.thumbsContainerElement.scrollLeft + nextInToView.element.offsetWidth + 8,
-        behavior: 'smooth',
-      })
-    }
-    clearTimeout(timeout)
-  }, context.thumbsScrollDelay)
+  const {nextInToView} = getThumbs()
+  if (nextInToView) {
+    scrollIntoView(nextInToView.element, {
+      scrollMode: 'if-needed',
+      block: 'nearest',
+      inline: 'nearest',
+      boundary: context.thumbsContainerElement
+    })
+  }
 }
 
 const onPrevClick = (_event: MouseEvent) => {
-  const timeout = setTimeout(() => {
     const {prevInToView} = getThumbs()
     if (prevInToView) {
-      context.thumbsContainerElement.scroll({
-        left: context.thumbsContainerElement.scrollLeft - prevInToView.element.offsetWidth - 8,
-        behavior: 'smooth',
+      scrollIntoView(prevInToView.element, {
+        scrollMode: 'if-needed',
+        block: 'nearest',
+        inline: 'nearest',
+        boundary: context.thumbsContainerElement
       })
-      clearTimeout(timeout)
     }
-  }, context.thumbsScrollDelay)
 }
 
 </script>

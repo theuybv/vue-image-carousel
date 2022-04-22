@@ -13,7 +13,8 @@
   "dependencies": {
     "@faker-js/faker": "^6.1.1",
     "@tailwindcss/forms": "^0.5.0",
-    "@vueuse/core": "^8.2.6",
+    "@vueuse/core": "^8.3.1",
+    "smooth-scroll-into-view-if-needed": "^1.1.33",
     "vue": "^3.2.31",
     "vue-spinner": "^1.0.4"
   },

@@ -8,6 +8,7 @@ const {images, options} = defineProps<{
 }>()
 
 const reactiveContext = reactive<ImageCarouselProviderProps>({
+  autoPlayMode: options.autoPlayMode || 'none',
   hasIndicator: options.hasIndicator || false,
   thumbsScrollDelay: 80,
   imageAspectRatio: options.imageAspectRatio || AspectRatio['3/2'],
