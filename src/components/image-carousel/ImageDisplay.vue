@@ -75,7 +75,7 @@ watch([() => context.currentIndex, isScrolling], ([clickedIndex, isScrolling]) =
           ref="imageRef"
       />
     </Transition>
-    <ThumbsIndicator v-if="context.hasIndicator" :context="context"/>
+    <ThumbsIndicator v-if="context.hasIndicator" />
   </figure>
 </template>
 

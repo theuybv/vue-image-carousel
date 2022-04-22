@@ -1,10 +1,9 @@
 <script setup lang="ts">
 
-import {ImageCarouselProviderProps} from "./types";
+import {ImageCarouselKey, ImageCarouselProviderProps} from "./types";
+import {inject} from "vue";
 
-const {
-  context
-} = defineProps<{ context: ImageCarouselProviderProps }>()
+const context = inject(ImageCarouselKey) as ImageCarouselProviderProps
 
 const onIndicatorClick = (event: MouseEvent, index: number) => {
   context.currentIndex = index
@@ -19,7 +18,7 @@ const onIndicatorClick = (event: MouseEvent, index: number) => {
           <li v-for="(item, index) in context.images" :key="item.thumbSrc">
             <button
                 :class="{'bg-red-600': index === context.currentIndex, 'bg-white opacity-80': index !== context.currentIndex}"
-                class="rounded-full w-3 h-3 hover:bg-red-200"
+                class="rounded-full w-3 h-3 active:bg-red-600"
                 aria-label="thumb indicator" @click="onIndicatorClick($event, index)"
             />
           </li>
