@@ -24,7 +24,7 @@ const onItemSelect = (index: number) => {
           :key="context.currentImage.imageSrc"
           :context="context"
       />
-      <ThumbsContainer v-if="!context.hasIndicator" :context="context"/>
+      <ThumbsContainer v-if="context.viewableThumbsCount > 0" :context="context"/>
     </div>
   </ImageCarouselProvider>
 </template>

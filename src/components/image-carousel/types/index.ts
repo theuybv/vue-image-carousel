@@ -23,7 +23,7 @@ export type ThumbsInOutView = {
 
 export type ImageCarouselOptions = {
   readonly images: CarouselImage[];
-  readonly thumbsCount: number;
+  readonly viewableThumbsCount: number;
   readonly thumbsGap: number;
   readonly thumbsWidth: number;
   readonly currentImage: CarouselImage;
@@ -31,7 +31,8 @@ export type ImageCarouselOptions = {
   readonly thumbAspectRatio: AspectRatio;
   readonly imageMaxHeight: number;
   readonly autoPlayTimeMs: number;
-  readonly hasIndicator: boolean;
+  readonly hasImagesIndicator: boolean;
+  readonly hasImagesIndicatorPrevNext: boolean;
   readonly autoPlayMode: "none" | "loop" | "default";
 };
 

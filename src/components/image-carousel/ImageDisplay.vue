@@ -2,10 +2,12 @@
 import {ImageCarouselProviderProps} from "./types";
 import {ref, watch} from "vue";
 import {computedAsync, useElementSize, useIntervalFn, useScroll} from '@vueuse/core'
+// import {useClamp, useSwipe}  from '@vueuse/core'
 import ThumbsIndicator from "./ThumbsIndicator.vue";
 import Loader from 'vue-spinner/src/BeatLoader.vue'
 import {loadImage} from "./utils";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
+import ImagesNavigator from "./ImagesNavigator.vue";
 
 const {
   context
@@ -52,31 +54,40 @@ const onAutoplay = () => {
 
 const intervalFn = useIntervalFn(onAutoplay, context.autoPlayTimeMs, {immediate: context.autoPlayMode !== 'none'})
 
-watch([() => context.currentIndex, isScrolling], ([clickedIndex, isScrolling]) => {
-  if (isScrolling) {
-
+/*const {direction} = usePointerSwipe(imageRef)
+watch(direction, () => {
+  if (direction.value === 'LEFT') {
+    const index = useClamp(context.currentIndex--, 0, context.images.length - 1)
+    context.currentIndex = index.value
+  } else if (direction.value === 'RIGHT') {
+    const index = useClamp(context.currentIndex++, 0, context.images.length - 1)
+    context.currentIndex = index.value
   }
-})
+})*/
 
 </script>
 
 <template>
-  <figure
+  <div
+      ref="swipeRef"
       class="relative bg-black"
       :style="{ maxHeight: `${context.imageMaxHeight}px`, aspectRatio: context.imageAspectRatio.toString()}"
   >
     <Loader color="#fff" class="flex w-full h-full justify-center items-center" v-if="!loadedImage"/>
     <Transition v-else appear name="fade">
-      <img
-          class="bg-black w-full h-full object-contain"
-          :src="context.currentImage.imageSrc"
-          :alt="context.currentImage.alt"
-          :style="{ aspectRatio: context.imageAspectRatio.toString() }"
-          ref="imageRef"
-      />
+      <figure>
+        <img
+            class="bg-black w-full h-full object-contain"
+            :src="context.currentImage.imageSrc"
+            :alt="context.currentImage.alt"
+            :style="{ aspectRatio: context.imageAspectRatio.toString() }"
+            ref="imageRef"
+        />
+      </figure>
     </Transition>
-    <ThumbsIndicator v-if="context.hasIndicator" />
-  </figure>
+    <ThumbsIndicator v-if="context.hasImagesIndicator"/>
+    <ImagesNavigator v-if="context.hasImagesIndicatorPrevNext"/>
+  </div>
 </template>
 
 <style scoped>

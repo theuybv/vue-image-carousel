@@ -67,7 +67,6 @@ onMounted(() => {
                   :width="context.thumbsWidth"
                   :image="item" :key="index"/>
     </div>
-
     <ThumbsNavigator v-if="thumbImages.length" :context="context"/>
   </div>
 </template>

@@ -13,7 +13,7 @@ const imageCarouselDemoList: {
   options: {
     autoPlayMode: 'default',
     autoPlayTimeMs: 10000,
-    thumbsCount: 4,
+    viewableThumbsCount: 4,
     imageAspectRatio: AspectRatio['3/2']
   },
   numberOfImages: 10,
@@ -26,8 +26,23 @@ const imageCarouselDemoList: {
   {
     options: {
       autoPlayMode: 'loop',
+      autoPlayTimeMs: 5000,
+      viewableThumbsCount: 2,
+      imageAspectRatio: AspectRatio['3/2'],
+      thumbAspectRatio: AspectRatio['1/1']
+    },
+    numberOfImages: 10,
+    imageSourceAspectRatio: AspectRatio['3/2'],
+    get images() {
+      return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
+    },
+
+  },
+  {
+    options: {
+      autoPlayMode: 'loop',
       autoPlayTimeMs: 3000,
-      hasIndicator: true,
+      hasImagesIndicator: true,
       imageAspectRatio: AspectRatio['3/2']
     },
     numberOfImages: 8,
@@ -36,6 +51,36 @@ const imageCarouselDemoList: {
       return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
     },
 
+  },
+  {
+    options: {
+      autoPlayMode: 'none',
+      autoPlayTimeMs: 3000,
+      hasImagesIndicator: true,
+      hasImagesIndicatorPrevNext: true,
+      imageAspectRatio: AspectRatio['3/2']
+    },
+    numberOfImages: 5,
+    imageSourceAspectRatio: AspectRatio['3/2'],
+    get images() {
+      return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
+    },
+
+  },
+  {
+    options: {
+      autoPlayMode: 'none',
+      autoPlayTimeMs: 3000,
+      hasImagesIndicator: false,
+      hasImagesIndicatorPrevNext: true,
+      imageAspectRatio: AspectRatio['4/3'],
+      thumbAspectRatio: AspectRatio['1/1'],
+    },
+    numberOfImages: 12,
+    imageSourceAspectRatio: AspectRatio['4/3'],
+    get images() {
+      return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
+    },
   }]
 
 </script>
@@ -47,11 +92,7 @@ const imageCarouselDemoList: {
         <ImageCarousel :images="item.images"
                        :options="item.options"/>
         <ul class="prose text-center">
-          <li><strong>autoPlayMode: </strong>{{ item.options.autoPlayMode }}</li>
-          <li><strong>autoPlayTimeMs: </strong>{{ item.options.autoPlayTimeMs }}</li>
-          <li><strong>hasIndicator: </strong>{{ item.options.hasIndicator || false }}</li>
-          <li><strong>thumbsCount: </strong>{{ item.options.thumbsCount || 0 }}</li>
-          <li><strong>imageAspectRatio: </strong>{{ item.options.imageAspectRatio }}</li>
+          <li v-for="(key, index) in Object.keys(item.options)"><strong>{{ key }}: </strong>{{ item.options[key] }}</li>
           <li><strong>numberOfImages: </strong>{{ item.numberOfImages }}</li>
           <li><strong>imageSourceAspectRatio: </strong>{{ item.imageSourceAspectRatio }}</li>
         </ul>

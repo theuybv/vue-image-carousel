@@ -13,13 +13,14 @@ const emit = defineEmits<{
 
 const reactiveContext = reactive<ImageCarouselProviderProps>({
   emit,
+  hasImagesIndicatorPrevNext: options.hasImagesIndicatorPrevNext || false,
   autoPlayTimeMs: options.autoPlayTimeMs || 5000,
   autoPlayMode: options.autoPlayMode || 'none',
-  hasIndicator: options.hasIndicator || false,
+  hasImagesIndicator: options.hasImagesIndicator || false,
   imageAspectRatio: options.imageAspectRatio || AspectRatio['3/2'],
   thumbAspectRatio: options.thumbAspectRatio || AspectRatio['4/3'],
   imageMaxHeight: options.imageMaxHeight || 400,
-  thumbsCount: options.thumbsCount || 6,
+  viewableThumbsCount: options.viewableThumbsCount || 0,
   thumbsGap: options.thumbsGap || 8,
   images,
   thumbElements: [],
@@ -28,9 +29,9 @@ const reactiveContext = reactive<ImageCarouselProviderProps>({
   imageContainerWidth: 0,
   get thumbsWidth() {
     return (
-        this.imageContainerWidth / this.thumbsCount -
+        this.imageContainerWidth / this.viewableThumbsCount -
         this.thumbsGap +
-        this.thumbsGap / this.thumbsCount
+        this.thumbsGap / this.viewableThumbsCount
     );
   },
   get currentImage() {
