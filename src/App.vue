@@ -27,7 +27,7 @@ const imageCarouselDemoList: {
     options: {
       autoPlayMode: 'loop',
       autoPlayTimeMs: 5000,
-      viewableThumbsCount: 2,
+      viewableThumbsCount: 8,
       imageAspectRatio: AspectRatio['3/2'],
       thumbAspectRatio: AspectRatio['1/1']
     },
