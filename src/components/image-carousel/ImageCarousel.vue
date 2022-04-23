@@ -19,12 +19,11 @@ const onItemSelect = (index: number) => {
 
 <template>
   <ImageCarouselProvider :images="images" #="{context}" :options="options" @itemSelect="onItemSelect">
-    <div class="flex flex-col gap-2">
       <ImageDisplay
+          class="mb-2"
           :key="context.currentImage.imageSrc"
           :context="context"
       />
       <ThumbsContainer v-if="context.viewableThumbsCount > 0" :context="context"/>
-    </div>
   </ImageCarouselProvider>
 </template>

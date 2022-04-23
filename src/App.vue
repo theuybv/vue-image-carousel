@@ -87,15 +87,13 @@ const imageCarouselDemoList: {
 
 <template>
   <div class="container mx-auto p-8">
-    <div class="grid grid-cols-1 md:grid-cols-2  gap-8 ">
-      <div class="gap-2 flex flex-col" v-for="(item, index) in imageCarouselDemoList">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div v-for="(item, index) in imageCarouselDemoList">
         <ImageCarousel :images="item.images"
                        :options="item.options"/>
-        <ul class="prose text-center">
-          <li v-for="(key, index) in Object.keys(item.options)"><strong>{{ key }}: </strong>{{ item.options[key] }}</li>
-          <li><strong>numberOfImages: </strong>{{ item.numberOfImages }}</li>
-          <li><strong>imageSourceAspectRatio: </strong>{{ item.imageSourceAspectRatio }}</li>
-        </ul>
+          <p v-for="(key, index) in Object.keys(item.options)"><strong>{{ key }}: </strong>{{ item.options[key] }}</p>
+          <p><strong>numberOfImages: </strong>{{ item.numberOfImages }}</p>
+          <p><strong>imageSourceAspectRatio: </strong>{{ item.imageSourceAspectRatio }}</p>
       </div>
     </div>
   </div>
