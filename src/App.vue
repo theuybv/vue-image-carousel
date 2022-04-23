@@ -8,7 +8,7 @@ const imageCarouselDemoList: {
   images: CarouselImage[]
   imageSourceAspectRatio: AspectRatio,
   numberOfImages: number
-  options: Partial<ImageCarouselOptions>
+  options: Partial<ImageCarouselOptions> | any
 }[] = [{
   options: {
     autoPlayMode: 'default',
