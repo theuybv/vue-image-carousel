@@ -14,10 +14,11 @@ const imageCarouselDemoList: {
     autoPlayMode: 'default',
     autoPlayTimeMs: 10000,
     viewableThumbsCount: 4,
-    imageAspectRatio: AspectRatio['3/2']
+    imageAspectRatio: AspectRatio['3/2'],
+    thumbAspectRatio: AspectRatio['4/3']
   },
   numberOfImages: 10,
-  imageSourceAspectRatio: AspectRatio['1/1'],
+  imageSourceAspectRatio: AspectRatio['3/2'],
   get images() {
     return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
   },
@@ -27,12 +28,12 @@ const imageCarouselDemoList: {
     options: {
       autoPlayMode: 'loop',
       autoPlayTimeMs: 5000,
-      viewableThumbsCount: 8,
+      viewableThumbsCount: 5,
       imageAspectRatio: AspectRatio['3/2'],
       thumbAspectRatio: AspectRatio['1/1']
     },
     numberOfImages: 10,
-    imageSourceAspectRatio: AspectRatio['3/2'],
+    imageSourceAspectRatio: AspectRatio['1/1'],
     get images() {
       return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
     },
