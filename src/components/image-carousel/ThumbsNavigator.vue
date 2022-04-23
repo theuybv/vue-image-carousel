@@ -39,7 +39,7 @@ const showNext = ref<boolean>((() => {
 })())
 
 watch(height, () => {
-  navPosY.value = context.thumbsContainerElement.offsetHeight / 2 - 32 / 2
+  navPosY.value = context.thumbsContainerElement.offsetHeight / 2 - 24 / 2
 })
 
 watch(isScrolling, () => {
@@ -63,15 +63,15 @@ const onNextClick = (_event: MouseEvent) => {
 }
 
 const onPrevClick = (_event: MouseEvent) => {
-    const {prevInToView} = getThumbs()
-    if (prevInToView) {
-      scrollIntoView(prevInToView.element, {
-        scrollMode: 'if-needed',
-        block: 'nearest',
-        inline: 'nearest',
-        boundary: context.thumbsContainerElement
-      })
-    }
+  const {prevInToView} = getThumbs()
+  if (prevInToView) {
+    scrollIntoView(prevInToView.element, {
+      scrollMode: 'if-needed',
+      block: 'nearest',
+      inline: 'nearest',
+      boundary: context.thumbsContainerElement
+    })
+  }
 }
 
 </script>
