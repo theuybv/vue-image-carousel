@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import {ImageCarouselProviderProps} from "./types";
-import {ref, watch} from "vue";
-import {computedAsync, useElementSize, useIntervalFn, useScroll} from '@vueuse/core'
-// import {useClamp, useSwipe}  from '@vueuse/core'
+import {onMounted, ref, watch} from "vue";
+import {computedAsync, useClamp, useElementSize, useIntervalFn} from '@vueuse/core'
 import ThumbsIndicator from "./ThumbsIndicator.vue";
 import Loader from 'vue-spinner/src/BeatLoader.vue'
 import {loadImage} from "./utils";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
 import ImagesNavigator from "./ImagesNavigator.vue";
+import Hammer from 'hammerjs'
 
 const {
   context
 } = defineProps<{ context: ImageCarouselProviderProps }>()
 
 const imageRef = ref<HTMLImageElement | null>(null);
+const swipeRef = ref<HTMLElement>(document.createElement('div'))
 const {width} = useElementSize(imageRef)
 
 watch(width, () => {
@@ -27,19 +28,8 @@ const loadedImage = computedAsync(
     undefined,
 )
 
-const {isScrolling} = useScroll(context.thumbsContainerElement)
-
-
-const onAutoplay = () => {
-  const isLastIndex = context.currentIndex >= context.images.length - 1;
-  if (isLastIndex && context.autoPlayMode === 'default') {
-    intervalFn.pause()
-    return
-  }
-
-  const nextIndex = isLastIndex ? 0 : context.currentIndex + 1
-  context.currentIndex = nextIndex
-  const target = context.thumbElements[nextIndex];
+const scrollToTarget = (index: number) => {
+  const target = context.thumbElements[index];
   try {
     scrollIntoView(target, {
       scrollMode: 'if-needed',
@@ -49,21 +39,39 @@ const onAutoplay = () => {
     })
   } catch (e) {
 
+  } finally {
+    context.currentIndex = index
   }
+}
+
+const onAutoplay = () => {
+  const isLastIndex = context.currentIndex >= context.images.length - 1;
+  if (isLastIndex && context.autoPlayMode === 'default') {
+    intervalFn.pause()
+    return
+  }
+  const nextIndex = isLastIndex ? 0 : context.currentIndex + 1
+  scrollToTarget(nextIndex)
 }
 
 const intervalFn = useIntervalFn(onAutoplay, context.autoPlayTimeMs, {immediate: context.autoPlayMode !== 'none'})
 
-/*const {direction} = usePointerSwipe(imageRef)
-watch(direction, () => {
-  if (direction.value === 'LEFT') {
-    const index = useClamp(context.currentIndex--, 0, context.images.length - 1)
-    context.currentIndex = index.value
-  } else if (direction.value === 'RIGHT') {
-    const index = useClamp(context.currentIndex++, 0, context.images.length - 1)
-    context.currentIndex = index.value
+onMounted(() => {
+  const mc = new Hammer(swipeRef.value, {
+    inputClass: Hammer.TouchInput
+  });
+  const onSwipeLeft = () => {
+    const index = useClamp(context.currentIndex + 1, 0, context.images.length - 1)
+    scrollToTarget(index.value)
   }
-})*/
+  const onSwipeRight = () => {
+    const index = useClamp(context.currentIndex - 1, 0, context.images.length - 1)
+    scrollToTarget(index.value)
+  }
+  mc.on("swipeleft", onSwipeLeft);
+  mc.on("swiperight", onSwipeRight);
+})
+
 
 </script>
 

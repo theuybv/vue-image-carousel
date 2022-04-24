@@ -22,7 +22,6 @@ const imageCarouselDemoList: {
   get images() {
     return getDemoImages(this.numberOfImages, this.imageSourceAspectRatio)
   },
-
 },
   {
     options: {
@@ -75,7 +74,7 @@ const imageCarouselDemoList: {
       hasImagesIndicator: false,
       hasImagesIndicatorPrevNext: true,
       imageAspectRatio: AspectRatio['4/3'],
-      thumbAspectRatio: AspectRatio['1/1'],
+      thumbAspectRatio: AspectRatio['1/1']
     },
     numberOfImages: 12,
     imageSourceAspectRatio: AspectRatio['4/3'],
