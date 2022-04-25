@@ -8,6 +8,7 @@ import Jsx from "@vitejs/plugin-vue-jsx";
 export default defineConfig({
   plugins: [vue(), Jsx()],
   test: {
+    setupFiles: ["./test-setup.ts"],
     globals: true,
     environment: "happy-dom",
     transformMode: {

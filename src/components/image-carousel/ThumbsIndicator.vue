@@ -4,8 +4,6 @@ import {useImageCarousel} from "./useImageCarousel";
 
 const context = useImageCarousel()
 
-console.log(context.images)
-
 const onIndicatorClick = (event: MouseEvent, index: number) => {
   context.currentIndex = index
 }
@@ -20,6 +18,7 @@ const onIndicatorClick = (event: MouseEvent, index: number) => {
             <button
                 :class="{'bg-red-600': index === context.currentIndex, 'bg-white opacity-80': index !== context.currentIndex}"
                 class="rounded-full w-3 h-3 active:bg-red-600"
+                :aria-selected="index === context.currentIndex"
                 aria-label="thumb indicator" @click="onIndicatorClick($event, index)"
             />
           </li>
