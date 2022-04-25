@@ -28,8 +28,6 @@ const loadedImage = computedAsync(
     undefined,
 )
 
-console.log(loadedImage.value)
-
 const scrollToTarget = (index: number) => {
   const target = context.thumbElements[index];
   try {
