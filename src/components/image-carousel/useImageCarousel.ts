@@ -28,7 +28,7 @@ export const defaultImageCarouselProps: ImageCarouselProviderProps = {
   thumbsContainerElement: document.createElement("div"),
   thumbsGap: 8,
   thumbsWidth: 0,
-  viewableThumbsCount: 6,
+  viewableThumbsCount: 0,
 };
 
 export const reactiveProviderContext = (
@@ -72,5 +72,8 @@ export const reactiveProviderContext = (
 };
 
 export const useImageCarousel = () => {
-  return inject(ImageCarouselKey, reactiveProviderContext([], {}));
+  return inject(
+    ImageCarouselKey,
+    reactiveProviderContext([], defaultImageCarouselProps)
+  );
 };
