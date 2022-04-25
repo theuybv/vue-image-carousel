@@ -42,9 +42,7 @@ export type ImageCarouselProviderProps = {
   thumbsContainerElement: HTMLElement;
   currentIndex: number;
   allLoadedThumbs: Promise<CarouselImage[]>;
-  emit: {
-    (e: "itemSelect", index: number): void;
-  };
 } & ImageCarouselOptions;
 
-export const ImageCarouselKey = Symbol();
+export const ImageCarouselKey =
+  Symbol() as InjectionKey<ImageCarouselProviderProps>;

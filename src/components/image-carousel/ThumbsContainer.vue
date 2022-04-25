@@ -2,14 +2,12 @@
 import {onMounted, ref} from "vue";
 import ImageThumb from "./ImageThumb.vue";
 import {computedAsync} from "@vueuse/core";
-import {ImageCarouselProviderProps} from "./types";
 import {getImageThumbsInOutView, getThumbsIterator} from "./utils";
 import ThumbsNavigator from "./ThumbsNavigator.vue";
 import scrollIntoView from 'smooth-scroll-into-view-if-needed'
+import {useImageCarousel} from "./useImageCarousel";
 
-const {
-  context
-} = defineProps<{ context: ImageCarouselProviderProps }>()
+const context = useImageCarousel()
 
 const thumbsContainerRef = ref()
 const imageThumbRefs = ref([...new Array(context.images.length)])
@@ -67,7 +65,7 @@ onMounted(() => {
                   :width="context.thumbsWidth"
                   :image="item" :key="index"/>
     </div>
-    <ThumbsNavigator v-if="thumbImages.length" :context="context"/>
+    <ThumbsNavigator v-if="thumbImages.length" />
   </div>
 </template>
 <style scoped>

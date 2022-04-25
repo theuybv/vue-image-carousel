@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {ImageCarouselProviderProps} from "./types";
 import {onMounted, ref, watch} from "vue";
 import {computedAsync, useClamp, useElementSize, useIntervalFn} from '@vueuse/core'
 import ThumbsIndicator from "./ThumbsIndicator.vue";
@@ -8,10 +7,9 @@ import {loadImage} from "./utils";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
 import ImagesNavigator from "./ImagesNavigator.vue";
 import Hammer from 'hammerjs'
+import {useImageCarousel} from "./useImageCarousel";
 
-const {
-  context
-} = defineProps<{ context: ImageCarouselProviderProps }>()
+const context = useImageCarousel()
 
 const imageRef = ref<HTMLImageElement | null>(null);
 const swipeRef = ref<HTMLElement>(document.createElement('div'))
@@ -21,12 +19,16 @@ watch(width, () => {
   context.imageContainerWidth = width.value
 })
 
+
+
 const loadedImage = computedAsync(
     async () => {
       return await loadImage(context.currentImage.imageSrc)
     },
     undefined,
 )
+
+console.log(loadedImage.value)
 
 const scrollToTarget = (index: number) => {
   const target = context.thumbElements[index];

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
-import {ImageCarouselKey, ImageCarouselProviderProps} from "./types";
-import {inject} from "vue";
+import {useImageCarousel} from "./useImageCarousel";
 
-const context = inject(ImageCarouselKey) as ImageCarouselProviderProps
+const context = useImageCarousel()
+
+console.log(context.images)
 
 const onIndicatorClick = (event: MouseEvent, index: number) => {
   context.currentIndex = index

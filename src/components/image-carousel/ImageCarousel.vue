@@ -10,20 +10,14 @@ export type ImageCarouselProps = {
 }
 const {images, options} = defineProps<ImageCarouselProps>()
 
-
-const onItemSelect = (index: number) => {
-  // console.log(index)
-}
 </script>
 
-
 <template>
-  <ImageCarouselProvider :images="images" #="{context}" :options="options" @itemSelect="onItemSelect">
+  <ImageCarouselProvider :images="images" #="{context}" :options="options">
       <ImageDisplay
           class="mb-2"
           :key="context.currentImage.imageSrc"
-          :context="context"
       />
-      <ThumbsContainer v-if="context.viewableThumbsCount > 0" :context="context"/>
+      <ThumbsContainer v-if="context.viewableThumbsCount > 0" />
   </ImageCarouselProvider>
 </template>
