@@ -7,10 +7,12 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test:unit": "vitest --no-watch",
+    "test:coverage": "vitest --no-watch --coverage",
     "test": "vitest"
   },
   "pre-push": [
-    "build"
+    "build",
+    "test:unit"
   ],
   "dependencies": {
     "@faker-js/faker": "^6.1.1",
@@ -33,6 +35,7 @@
     "@vitejs/plugin-vue-jsx": "^1.3.10",
     "@vue/test-utils": "^2.0.0-rc.21",
     "autoprefixer": "^10.4.4",
+    "c8": "^7.11.2",
     "happy-dom": "^2.55.0",
     "postcss": "^8.4.12",
     "pre-push": "^0.1.2",
