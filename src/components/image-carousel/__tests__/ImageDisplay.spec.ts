@@ -3,7 +3,10 @@ import { ref } from "vue";
 import { mountWithImageCarouselProvider } from "./utils";
 import ImageDisplay from "../ImageDisplay.vue";
 import Loader from "vue-spinner/src/BeatLoader.vue";
-import { computedAsync } from "@vueuse/core";
+import { computedAsync, useIntervalFn } from "@vueuse/core";
+import { defaultImageCarouselProps } from "../useImageCarousel";
+import ThumbsIndicator from "../ThumbsIndicator.vue";
+import ImagesNavigator from "../ImagesNavigator.vue";
 
 vi.mock("@vueuse/core", () => {
   return {
@@ -22,6 +25,7 @@ describe("ImageDisplay", () => {
     computedAsyncMock.mockReturnValue(ref("loadedimage"));
 
     const wrapper = mountWithImageCarouselProvider(ImageDisplay, {
+      ...defaultImageCarouselProps,
       images: [
         {
           imageSrc: "",
@@ -43,6 +47,7 @@ describe("ImageDisplay", () => {
     computedAsyncMock.mockReturnValue(ref(undefined));
 
     const wrapper = mountWithImageCarouselProvider(ImageDisplay, {
+      ...defaultImageCarouselProps,
       images: [
         {
           imageSrc: "",
@@ -54,5 +59,29 @@ describe("ImageDisplay", () => {
 
     expect(wrapper.find("figure img").exists()).toBeFalsy();
     expect(wrapper.findComponent(Loader).exists()).toBeTruthy();
+  });
+
+  it("should hasImagesIndicator && hasImagesIndicatorPrevNext", () => {
+    const computedAsyncMock = computedAsync as MockedFunction<
+      typeof computedAsync
+    >;
+
+    computedAsyncMock.mockReturnValue(ref("loadedimage"));
+
+    const wrapper = mountWithImageCarouselProvider(ImageDisplay, {
+      ...defaultImageCarouselProps,
+      hasImagesIndicator: true,
+      hasImagesIndicatorPrevNext: true,
+      images: [
+        {
+          imageSrc: "",
+          alt: "",
+          thumbSrc: "",
+        },
+      ],
+    });
+
+    expect(wrapper.findComponent(ThumbsIndicator).exists()).toBeTruthy();
+    expect(wrapper.findComponent(ImagesNavigator).exists()).toBeTruthy();
   });
 });

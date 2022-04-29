@@ -1,5 +1,6 @@
 import ThumbsIndicator from "../ThumbsIndicator.vue";
 import { mountWithImageCarouselProvider } from "./utils";
+import { defaultImageCarouselProps } from "../useImageCarousel";
 
 describe("ThumbsIndicator", () => {
   const images = [
@@ -17,6 +18,7 @@ describe("ThumbsIndicator", () => {
 
   it("should render indicators and change currentIndex by clicking on item", async () => {
     const wrapper = mountWithImageCarouselProvider(ThumbsIndicator, {
+      ...defaultImageCarouselProps,
       images,
     });
     expect(wrapper.findAll("button")).toHaveLength(images.length);
